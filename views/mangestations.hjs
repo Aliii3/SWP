@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Manage Routes</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <h1>Manage Routes</h1>
+  
+  <h2>Create Route</h2>
+  <form id="createRouteForm">
+    <label for="routeName">Route Name:</label>
+    <input type="text" id="routeName" name="routeName" required>
+    
+    <button type="submit">Create Route</button>
+  </form>
+  
+  <h2>Update Route</h2>
+  <form id="updateRouteForm">
+    <label for="routeId">Route ID:</label>
+    <input type="text" id="routeId" name="routeId" required>
+    
+    <label for="newRouteName">New Route Name:</label>
+    <input type="text" id="newRouteName" name="newRouteName" required>
+    
+    <button type="submit">Update Route</button>
+  </form>
+  
+  <h2>All Routes</h2>
+  <table id="routeTable">
+    <thead>
+      <tr>
+        <th>Route ID</th>
+        <th>Route Name</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Routes will be dynamically added here -->
+    </tbody>
+  </table>
+  
+  <script>
+    // Function to fetch all routes and populate the table
+    function fetchAllRoutes() {
+      $.ajax({
+        url: "/api/v1/route/:routeId",
+        method: "PUT",
+        success: function(response) {
+          const routes = response.routes;
+          
+          // Clear the table body
+          $("#routeTable tbody").empty();
+          
+          // Iterate over the routes and add rows to the table
+          routes.forEach(function(route) {
+            const row = $("<tr>");
+            row.append($("<td>").text(route.routeId));
+            row.append($("<td>").text(route.routeName));
+            
+            // Add a delete button with the route ID as data attribute
+            const deleteButton = $("<button>")
+              .text("Delete")
+              .data("routeId", route.routeId)
+              .click(deleteRoute);
+            row.append($("<td>").append(deleteButton));
+            
+            $("#routeTable tbody").append(row);
+          });
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          console.error("Error fetching routes:", errorThrown);
+        }
+      });
+    }
+    
+    // Function to create a new route
+    $("#createRouteForm").submit(function(event) {
+  event.preventDefault(); // Prevent form submission
+  
+  const routeName = $("#routeName").val();
+  
+  // Make an AJAX request to create the route
+  $.ajax({
+    url: "/api/v1/route/:routeId",
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    data: JSON.stringify({
+      routeName: routeName
+    }),
+    success: function(response) {
+      console.log("Route created successfully");
+      // Redirect to the created route
+      window.location.href = "/api/v1/route/" + response.routeId;
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.error("Error creating route:", errorThrown);
+    }
+  });
+});
+    // Function to update a route
+    $("#updateRouteForm").submit(function(event) {
+      event.preventDefault(); // Prevent form submission
+      
+      const routeId = $("#routeId").val();
+      const newRouteName = $("#newRouteName").val();
+      
+      // Make an AJAX request to update the route
+      $.ajax({
+        url: `/api/v1/route/${routeId}`,
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        data: JSON.stringify({
+          routeName: newRouteName
+        }),
+        success: function(response) {
+          console.log("Route updated successfully");
+          // Fetch all routes again to update the table
+          fetchAllRoutes();
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          console.error("Error updating route:", errorThrown);
+        }
+      });
+    });
+    
+    // Function to delete a route
+    function deleteRoute() {
+      const routeId = $(this).data("routeId");
+      
+      // Make an AJAX request to delete the route
+      $.ajax({
+        url: `/api/v1/route/${routeId}`,
+        method: "DELETE",
+        success: function(response) {
+          console.log("Route deleted successfully");
+          // Fetch all routes again to update the table
+          fetchAllRoutes();
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          console.error("Error deleting route:", errorThrown);
+        }
+      });
+    }
+     document.addEventListener('keydown', function(event) {
+      if (event.key === "Escape") {
+        window.location.href = "http://localhost:3000/dashboard";}
+      })
+    
+    // Fetch all routes on page load
+    fetchAllRoutes();
+  </script>
+</body>
+</html>

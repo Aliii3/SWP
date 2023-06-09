@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Zone Information</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <h1>Zone Information</h1>
+  
+  <table id="zoneTable">
+    <thead>
+      <tr>
+        <th>Zone ID</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Zone information will be dynamically added here -->
+    </tbody>
+  </table>
+  
+  <script>
+    // Function to fetch zone information and populate the table
+    function fetchZoneInformation() {
+      $.ajax({
+        url: "/api/v1/zones",
+        method: "GET",
+        success: function(response) {
+          const zones = response;
+          
+          // Clear the table body
+          $("#zoneTable tbody").empty();
+          
+          // Iterate over the zones and add rows to the table
+          zones.forEach(function(zone) {
+            const row = $("<tr>");
+            row.append($("<td>").text(zone.zoneId));
+            row.append($("<td>").text(zone.price));
+            $("#zoneTable tbody").append(row);
+          });
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          console.error("Error fetching zone information:", errorThrown);
+        }
+      });
+    }
+    
+    // Fetch zone information on page load
+    fetchZoneInformation();
+  </script>
+</body>
+</html>

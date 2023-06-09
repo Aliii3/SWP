@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Users</title>
+    <link rel='stylesheet' href='/styles/bootstrap.min.css' />
+    <link rel='stylesheet' href='/styles/style.css' />
+  </head>
+  <body>
+    <div>
+      <div>
+        <nav class="navbar navbar-inverse" style="padding-left:130px;">
+          <ul class="nav navbar-nav">
+            <li><a href="/dashboard">Home</a></li>
+            <li><a href="/stations_example">Stations</a></li>
+            <li class="active"><a href="/users">Users</a></li>
+            <li><a href="/users/add">Add Users</a></li>
+            <li><a href="/">Logout</a></li>  
+          </ul>
+        </nav>
+      </div>
+      <br/>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">id</th>
+            <th scope="col">subtype</th>
+            <th scope="col">zoneid</th>
+            <th scope="col">userid</th>
+            <th scope="col">nooftickets</th>
+          </tr>
+          {{#subscription}}
+          <tr>
+            <td>{{id}}</td>
+            <td>{{subtype}}</td>
+            <td>{{zoneid}}</td>
+            <td>{{userid}}</td>
+            <td>{{nooftickets}}</td>
+          </tr>
+          {{/subscription}}
+        </thead>
+      </table>
+      <div>
+        <button id="purchaseButton" class="btn btn-primary">Purchase Subscription</button>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" type="text/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        // Find the purchase button element by its ID
+        var purchaseButton = document.getElementById("purchaseButton");
+
+        // Attach a click event listener to the purchase button
+        purchaseButton.addEventListener("click", function() {
+          // Make an AJAX request
+          $.ajax({
+            type: "POST",
+            url: "/api/v1/tickets/purchase/subscription",
+            success: function(response) {
+              // Redirect to another page
+              window.location.href = "/purchase_success";
+            },
+            error: function(xhr, status, error) {
+              console.error('Error:', error);
+              alert("An error occurred while purchasing the subscription");
+            }
+          });
+        });
+         document.addEventListener('keydown', function(event) {
+      if (event.key === "Escape") {
+        window.location.href = "http://localhost:3000/dashboard";}
+      })
+      });
+    </script>
+  </body>
+</html>
