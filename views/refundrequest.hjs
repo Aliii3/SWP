@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ticket Refund Requests</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <h1>Ticket Refund Requests</h1>
+  
+  <h2>Check Refund Request</h2>
+  <form id="checkRequestForm">
+    <label for="requestId">Request ID:</label>
+    <input type="text" id="requestId" name="requestId" required>
+    
+    <button type="submit">Check Request</button>
+  </form>
+  
+  <hr>
+  
+  <h2>Process Refund Request</h2>
+  <form id="processRequestForm">
+    <label for="requestId">Request ID:</label>
+    <input type="text" id="requestId" name="requestId" required>
+    
+    <label for="refundStatus">Refund Status:</label>
+    <select id="refundStatus" name="refundStatus" required>
+      <option value="Accepted">Accepted</option>
+      <option value="Pending">Pending</option>
+      <option value="Rejected">Rejected</option>
+    </select>
+    
+    <button type="submit">Submit</button>
+  </form>
+  
+  <div id="resultMessage"></div>
+  
+  <script>
+    // Function to handle checking a refund request
+    $('#checkRequestForm').submit(function(event) {
+      event.preventDefault(); // Prevent form submission
+      
+      const requestId = $('#requestId').val();
+      
+      // Make an AJAX request to check the refund request
+      $.ajax({
+        url: `/api/v1/requests/refunds/${requestId}`,
+        method: "GET",
+        success: function(response) {
+          $('#resultMessage').text('Refund request exists for this ID');
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          $('#resultMessage').text('Error: ' + jqXHR.responseText);
+        }
+      });
+    });
+    
+    // Function to handle processing a refund request
+    $('#processRequestForm').submit(function(event) {
+      event.preventDefault(); // Prevent form submission
+      
+      const requestId = $('#requestId').val();
+      const refundStatus = $('#refundStatus').val();
+      
+      // Make an AJAX request to process the refund request
+      $.ajax({
+        url: `/api/v1/requests/refunds/${requestId}`,
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        data: JSON.stringify({
+          refundStatus: refundStatus
+        }),
+        success: function(response) {
+          $('#resultMessage').text('Refund request processed successfully');
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          $('#resultMessage').text('Error: ' + jqXHR.responseText);
+        }
+      });
+       document.addEventListener('keydown', function(event) {
+      if (event.key === "Escape") {
+        window.location.href = "http://localhost:3000/dashboard";}
+      })
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ticket Price Checker</title>
+</head>
+<body>
+  <form id="ticketPriceForm">
+    <label for="originId">Origin:</label>
+    <input type="text" id="originId" name="originId" required>
+    <label for="destination">Destination:</label>
+    <input type="text" id="destinationId" name="destinationId" required>
+    
+    <button type="submit">Check Price</button>
+  </form>
+  
+  <div id="priceResult"></div>
+  
+  <script>
+    // Function to handle the form submission
+    $('#ticketPriceForm').submit(function(event) {
+      event.preventDefault(); // Prevent form submission
+      
+      const origin = ('originId');
+      const destination = ('destinationId');
+      
+      // Make an AJAX request to fetch ticket prices
+      $.ajax({
+        url: `/api/v1/tickets/price/originId/destinationId`,
+        method: 'GET',
+        success: function(response) {
+          const price = response.price;
+          $('#priceResult').text(`Ticket Price: $${price}`);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          $('#priceResult').text('Error: ' + jqXHR.responseJSON.error);
+        }
+      });
+    });
+     document.addEventListener('keydown', function(event) {
+      if (event.key === "Escape") {
+        window.location.href = "http://localhost:3000/dashboard";}
+      })
+  </script>
+</body>
+</html>

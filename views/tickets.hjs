@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Payment Page</title>
+</head>
+<body>
+  <h1>Payment Page</h1>
+  
+  <button onclick="subscribe()">Subscribe</button>
+  <button onclick="pay()">Pay</button>
+  
+  <script>
+    async function openSubscriptionForm() {
+      const subscriptionID = prompt("Please enter the Subscription ID:");
+      
+      // Make an API call to handle the subscription payment
+      try {
+        const response = await fetch("/api/v1/payment/ticket", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            subscriptionID: subscriptionID
+          })
+        });
+
+        if (response.ok) {
+          alert("Subscription ticket payment successful!");
+        } else {
+          const errorMessage = await response.text();
+          alert("Subscription ticket payment failed: " + errorMessage);
+        }
+      } catch (error) {
+        console.error(error);
+        alert("Something went wrong during payment. Please try again later.");
+      }
+    }
+    
+    async function openPaymentForm() {
+      const cardholderName = prompt("Please enter the Cardholder Name:");
+      const cardNumber = prompt("Please enter the Card Number:");
+      const cvv = prompt("Please enter the CVV:");
+      
+      // Make an API call to handle the payment
+      try {
+        const response = await fetch("/api/v1/payment/ticket", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            cardholderName: cardholderName,
+            cardNumber: cardNumber,
+            cvv: cvv
+          })
+        });
+
+        if (response.ok) {
+          alert("Normal payment successful!");
+        } else {
+          const errorMessage = await response.text();
+          alert("Normal payment failed: " + errorMessage);
+        }
+      } catch (error) {
+        console.error(error);
+        alert("Something went wrong during payment. Please try again later.");
+      }
+    }
+    
+    async function subscribe() {
+      openSubscriptionForm();
+    }
+    
+    async function pay() {
+      openPaymentForm();
+    }
+    document.addEventListener('keydown', function(event) {
+      if (event.key === "Escape") {
+        window.location.href = "http://localhost:3000/dashboard";}
+      })
+       document.addEventListener('keydown', function(event) {
+      if (event.key === "Escape") {
+        window.location.href = "http://localhost:3000/dashboard";}
+      })
+      
+  </script>
+</body>
+</html>

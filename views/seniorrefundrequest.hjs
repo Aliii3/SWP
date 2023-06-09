@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Senior Request Management</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <h1>Senior Request Management</h1>
+  
+  <h2>Check Senior Request</h2>
+  <form id="checkRequestForm">
+    <label for="userId">User ID:</label>
+    <input type="text" id="userId" name="userId" required>
+    
+    <button type="submit">Check Request</button>
+  </form>
+  
+  <hr>
+  
+ <h2>Create Senior Request</h2>
+<form id="createRequestForm">
+  <label for="nationalId">National ID:</label>
+  <input type="text" id="nationalId" name="nationalId" required>
+  
+  <label for="userid">User ID:</label>
+  <input type="text" id="userid" name="userid" required>
+  
+  <button type="submit">Create Request</button>
+</form>
+
+  
+  <hr>
+  
+  <h2>Approve or Disapprove Senior Request</h2>
+  <form id="approveRequestForm">
+    <label for="requestId">Request ID:</label>
+    <input type="text" id="requestId" name="requestId" required>
+    
+    <label for="status">Status:</label>
+    <select id="status" name="status" required>
+      <option value="accepted">Accepted</option>
+      <option value="rejected">Rejected</option>
+    </select>
+    
+    <button type="submit">Submit</button>
+  </form>
+  
+  <div id="resultMessage"></div>
+  
+  <script>
+    // Function to handle checking a senior request
+    $('#checkRequestForm').submit(function(event) {
+      event.preventDefault(); // Prevent form submission
+      
+      const userId = $('#userId').val();
+      
+      // Make an AJAX request to check the senior request
+      $.ajax({
+        url: `/api/v1/senior/request`,
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        data: JSON.stringify({
+          nationalId: nationalId
+        }),
+        success: function(response) {
+          $('#resultMessage').text('Senior request exists for this user');
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          $('#resultMessage').text('Error: ' + jqXHR.responseText);
+        }
+      });
+    });
+    
+    // Function to handle creating a senior request
+    $('#createRequestForm').submit(function(event) {
+      event.preventDefault(); // Prevent form submission
+      
+      const nationalId = $('#nationalId').val();
+      
+      // Make an AJAX request to create a senior request
+      $.ajax({
+        url: `/api/v1/senior/request`,
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        data: JSON.stringify({
+          nationalId: nationalId
+        }),
+        success: function(response) {
+          $('#resultMessage').text('Senior request created successfully');
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          $('#resultMessage').text('Error: ' + jqXHR.responseText);
+        }
+      });
+    });
+    
+    // Function to handle approving or disapproving a senior request
+    $('#approveRequestForm').submit(function(event) {
+      event.preventDefault(); // Prevent form submission
+      
+      const requestId = $('#requestId').val();  
+      const status = $('#status').val();
+      
+      // Make an AJAX request to approve or disapprove the senior request
+      $.ajax({
+        url: `/api/v1/requests/senior/${requestId}`,
+        method: " PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        data: JSON.stringify({
+          status: status
+        }),
+        success: function(response) {
+          $('#resultMessage').text('Senior request updated successfully');
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          $('#resultMessage').text('Error: ' + jqXHR.responseText);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

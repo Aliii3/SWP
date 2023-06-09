@@ -21,9 +21,31 @@
         <nav class="navbar navbar-inverse" style="padding-left:130px;">
           <ul class="nav navbar-nav">
             <li class="active"><a href="/dashboard">Home</a></li>
-            <li><a href="/stations_example">Station</a></li>
+            <li><a href="/managestations">Station</a></li>
             <li><a href="/users">Users</a></li>
-            <li><a href="/users/add">Add Users</a></li>
+            <li><a href="/resetpassword">Reset Password</a></li>
+            <li><a href="/subscriptions">View Subscriptions</a></li>
+            <li><a href="/rides/simulate">Simulate ride</a></li>
+            <li><a href="/tickets/price/:originId/:destinationId">Check Price</a></li>
+            <li><a href="/api/v1/payment/ticket"> Tickets</a></li>
+            <li><a href="/api/v1/requests/refunds"> Tickets Refund</a></li>
+            <li><a href="/api/v1/senior/request"> Tickets Senior Refund</a></li>
+            <li><a href="/api/v1/station"> Mange Stations</a></li>
+            <li><a href="/api/v1/station/:stationId"> Mange Stations</a></li>
+            <li><a href="/api/v1/requests/refunds"> Mange Refund request</a></li>
+            <li><a href="/api/v1/zones"> Zones</a></li>
+
+
+
+
+
+
+
+
+
+            
+
+
             <li><a href="/">Logout</a></li>
           </ul>
        </nav>
